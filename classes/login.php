@@ -24,28 +24,28 @@ if(!class_exists('__cf7_login')){
                 return $output; // signup first
             }
             $tags = wp_list_pluck($contact_form->scan_form_tags(), 'type', 'name');
-            if(isset($tags['__user_email']) and isset($tags['__user_login'])){
+            if(isset($tags['user_email']) and isset($tags['user_login'])){
                 return current_user_can('manage_options') ? str_replace('.', ':', __('Invalid user parameter(s).')) . ' ' . __('Duplicated username or email address.') : __('Something went wrong.');
             }
             $missing = [];
-            if(!isset($tags['__user_email']) and !isset($tags['__user_login'])){
-                $missing[] = '__user_login';
+            if(!isset($tags['user_email']) and !isset($tags['user_login'])){
+                $missing[] = 'user_login';
             }
-            if(!isset($tags['__user_password'])){
-                $missing[] = '__user_password';
+            if(!isset($tags['user_password'])){
+                $missing[] = 'user_password';
             }
             if($missing){
                 return current_user_can('manage_options') ? sprintf(__('Missing parameter(s): %s'), implode(', ', $missing)) . '.' : __('Something went wrong.');
             }
             $invalid = [];
-            if(isset($tags['__user_email']) and $tags['__user_email'] != 'email*'){
-                $invalid[] = '__user_email';
+            if(isset($tags['user_email']) and $tags['user_email'] != 'email*'){
+                $invalid[] = 'user_email';
             }
-            if(isset($tags['__user_login']) and $tags['__user_login'] != 'text*'){
-                $invalid[] = '__user_login';
+            if(isset($tags['user_login']) and $tags['user_login'] != 'text*'){
+                $invalid[] = 'user_login';
             }
-            if($tags['__user_password'] != 'password*'){
-                $invalid[] = '__user_password';
+            if(isset($tags['user_password']) and $tags['user_password'] != 'password*'){
+                $invalid[] = 'user_password';
             }
             if($invalid){
                 return current_user_can('manage_options') ? sprintf(__('Invalid parameter(s): %s'), implode(', ', $invalid)) . '.' : __('Something went wrong.');
@@ -69,9 +69,9 @@ if(!class_exists('__cf7_login')){
                 return;
             }
             // Asumo que ya pasó por la validación de requeridos.
-            $user_email = __get_posted_data('__user_email');
-            $user_login = __get_posted_data('__user_login');
-            $user_password = __get_posted_data('__user_password');
+            $user_email = __get_posted_data('user_email');
+            $user_login = __get_posted_data('user_login');
+            $user_password = __get_posted_data('user_password');
             if($user_login){
                 $user = get_user_by('login', $user_login);
                 if(!$user and wpcf7_is_email($user_login)){
@@ -87,7 +87,7 @@ if(!class_exists('__cf7_login')){
                 return;
             }
             wp_signon([
-                'remember' => __get_posted_data('__remember'),
+                'remember' => __get_posted_data('remember'),
                 'user_login' => $user->user_login,
                 'user_password' => $user_password,
             ]);
@@ -96,7 +96,7 @@ if(!class_exists('__cf7_login')){
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public static function wpcf7_validate_email($result, $tag){
-            if($tag->name !== '__user_email'){
+            if($tag->name !== 'user_email'){
                 return $result;
             }
             $contact_form = wpcf7_get_current_contact_form();
@@ -110,7 +110,7 @@ if(!class_exists('__cf7_login')){
                 return $result; // signup first
             }
             // Asumo que ya pasó por la validación de requeridos.
-            $user_email = __get_posted_data('__user_email');
+            $user_email = __get_posted_data('user_email');
             if(!email_exists($user_email)){
                 $message = __('Unknown email address. Check again or try your username.');
                 $message = explode('.', $message);
@@ -124,7 +124,7 @@ if(!class_exists('__cf7_login')){
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public static function wpcf7_validate_password($result, $tag){
-            if($tag->name !== '__user_password'){
+            if($tag->name !== 'user_password'){
                 return $result;
             }
             $contact_form = wpcf7_get_current_contact_form();
@@ -138,9 +138,9 @@ if(!class_exists('__cf7_login')){
                 return $result; // signup first
             }
             // Asumo que ya pasó por la validación de requeridos.
-            $user_email = __get_posted_data('__user_email');
-            $user_login = __get_posted_data('__user_login');
-            $user_password = __get_posted_data('__user_password');
+            $user_email = __get_posted_data('user_email');
+            $user_login = __get_posted_data('user_login');
+            $user_password = __get_posted_data('user_password');
             if($user_email === '' and $user_login === ''){
                 return $result; // double check
             }
@@ -168,7 +168,7 @@ if(!class_exists('__cf7_login')){
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public static function wpcf7_validate_text($result, $tag){
-            if($tag->name !== '__user_login'){
+            if($tag->name !== 'user_login'){
                 return $result;
             }
             $contact_form = wpcf7_get_current_contact_form();
@@ -182,7 +182,7 @@ if(!class_exists('__cf7_login')){
                 return $result; // signup first
             }
             // Asumo que ya pasó por la validación de requeridos.
-            $user_login = __get_posted_data('__user_login');
+            $user_login = __get_posted_data('user_login');
             $message = __('Unknown username. Check again or try your email address.');
             $user = get_user_by('login', $user_login);
             if(!$user and wpcf7_is_email($user_login)){

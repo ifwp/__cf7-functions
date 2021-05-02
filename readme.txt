@@ -5,7 +5,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.0
 Requires PHP: 5.6
-Stable tag: 1.4.28-alpha.1
+Stable tag: 1.5.1
 Tags: __cf7-functions
 Tested up to: 5.7
 

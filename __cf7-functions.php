@@ -12,7 +12,7 @@ Plugin URI: https://github.com/ifwp/__cf7-functions
 Requires at least: 5.0
 Requires PHP: 5.6
 Text Domain: __cf7-functions
-Version: 1.4.28-alpha.1
+Version: 1.5.1
 */
 
 if(defined('ABSPATH')){
@@ -20,7 +20,8 @@ if(defined('ABSPATH')){
         if(!function_exists('is_plugin_active')){
             require_once(ABSPATH . 'wp-admin/includes/plugin.php');
         }
-        if(is_plugin_active('__functions/__functions.php')){
+        if(is_plugin_active('__functions/__functions.php')){ // cf7
+			define('__CF7_FILE', __FILE__);
             require_once(plugin_dir_path(__FILE__) . 'functions.php');
             __build_update_checker('https://github.com/ifwp/__cf7-functions', __FILE__, '__cf7-functions');
         } else {

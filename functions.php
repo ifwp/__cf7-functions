@@ -23,6 +23,32 @@ if(!function_exists('__get_posted_data')){
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if(!function_exists('__cf7_support_bootstrap')){
+    function __cf7_support_bootstrap(){
+        if(!class_exists('__cf7_bootstrap')){
+            require_once(plugin_dir_path(__FILE__) . 'classes/bootstrap.php');
+        }
+		__off('wpcf7_init', 'wpcf7_add_form_tag_acceptance');
+		__off('wpcf7_init', 'wpcf7_add_form_tag_checkbox');
+		__off('wpcf7_init', 'wpcf7_add_form_tag_date');
+		__off('wpcf7_init', 'wpcf7_add_form_tag_file');
+		__off('wpcf7_init', 'wpcf7_add_form_tag_number');
+		__off('wpcf7_init', 'wpcf7_add_form_tag_select');
+		__off('wpcf7_init', 'wpcf7_add_form_tag_text');
+		__off('wpcf7_init', 'wpcf7_add_form_tag_textarea');
+		__one('wpcf7_autop_or_not', '__return_false');
+		__one('wpcf7_enqueue_scripts', ['__cf7_bootstrap', 'wpcf7_enqueue_scripts']);
+		__one('wpcf7_enqueue_styles', ['__cf7_bootstrap', 'wpcf7_enqueue_styles']);
+        __one('wpcf7_init', ['__cf7_bootstrap', 'wpcf7_init']);
+		__one('wpcf7_validate_password', ['__cf7_bootstrap', 'wpcf7_password_validation_filter'], 10, 2);
+		__one('wpcf7_validate_password*', ['__cf7_bootstrap', 'wpcf7_password_validation_filter'], 10, 2);
+		__one('wpcf7_validate_radio*', 'wpcf7_checkbox_validation_filter', 10, 2);
+		__require_simplehtmldom();
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 if(!function_exists('__cf7_support_close_date')){
     function __cf7_support_close_date(){
         __one('do_shortcode_tag', function($output, $tag, $attr, $m){
@@ -91,6 +117,18 @@ if(!function_exists('__cf7_support_close_limit')){
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if(!function_exists('__cf7_support_editor')){
+    function __cf7_support_editor(){
+        if(!class_exists('__cf7_editor')){
+            require_once(plugin_dir_path(__FILE__) . 'classes/editor.php');
+        }
+        __one('admin_enqueue_scripts', ['__cf7_editor', 'admin_enqueue_scripts']);
+		__one('wpcf7_autop_or_not', '__return_false');
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 if(!function_exists('__cf7_support_login')){
     function __cf7_support_login(){
         if(!class_exists('__cf7_login')){
@@ -98,9 +136,9 @@ if(!function_exists('__cf7_support_login')){
         }
         __one('do_shortcode_tag', ['__cf7_login', 'do_shortcode_tag'], 10, 4);
         __one('wpcf7_mail_sent', ['__cf7_login', 'wpcf7_mail_sent']);
-        __one('wpcf7_validate_email', ['__cf7_login', 'wpcf7_validate_email'], 10, 2);
-        __one('wpcf7_validate_password', ['__cf7_login', 'wpcf7_validate_password'], 10, 2);
-        __one('wpcf7_validate_text', ['__cf7_login', 'wpcf7_validate_text'], 10, 2);
+        __one('wpcf7_validate_email*', ['__cf7_login', 'wpcf7_validate_email'], 10, 2);
+        __one('wpcf7_validate_password*', ['__cf7_login', 'wpcf7_validate_password'], 10, 2);
+        __one('wpcf7_validate_text*', ['__cf7_login', 'wpcf7_validate_text'], 10, 2);
     }
 }
 
@@ -135,6 +173,29 @@ if(!function_exists('__cf7_support_open_date')){
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if(!function_exists('__cf7_support_redirect')){
+    function __cf7_support_redirect(){
+        if(!class_exists('__cf7_redirect')){
+            require_once(plugin_dir_path(__FILE__) . 'classes/redirect.php');
+        }
+        __one('wpcf7_enqueue_scripts', ['__cf7_redirect', 'wpcf7_enqueue_scripts']);
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+if(!function_exists('__cf7_support_select2')){
+    function __cf7_support_select2(){
+        if(!class_exists('__cf7_select2')){
+            require_once(plugin_dir_path(__FILE__) . 'classes/select2.php');
+        }
+        __one('wpcf7_enqueue_scripts', ['__cf7_select2', 'wpcf7_enqueue_scripts']);
+        __one('wpcf7_enqueue_styles', ['__cf7_select2', 'wpcf7_enqueue_styles']);
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 if(!function_exists('__cf7_support_signup')){
     function __cf7_support_signup(){
         if(!class_exists('__cf7_signup')){
@@ -142,9 +203,9 @@ if(!function_exists('__cf7_support_signup')){
         }
         __one('do_shortcode_tag', ['__cf7_signup', 'do_shortcode_tag'], 10, 4);
         __one('wpcf7_mail_sent', ['__cf7_signup', 'wpcf7_mail_sent']);
-        __one('wpcf7_validate_email', ['__cf7_signup', 'wpcf7_validate_email'], 10, 2);
-        __one('wpcf7_validate_password', ['__cf7_signup', 'wpcf7_validate_password'], 10, 2);
-        __one('wpcf7_validate_text', ['__cf7_signup', 'wpcf7_validate_text'], 10, 2);
+        __one('wpcf7_validate_email*', ['__cf7_signup', 'wpcf7_validate_email'], 10, 2);
+        __one('wpcf7_validate_password*', ['__cf7_signup', 'wpcf7_validate_password'], 10, 2);
+        __one('wpcf7_validate_text*', ['__cf7_signup', 'wpcf7_validate_text'], 10, 2);
     }
 }
 
@@ -158,8 +219,22 @@ if(!function_exists('__cf7_support_storage')){
         __one('do_shortcode_tag', ['__cf7_storage', 'do_shortcode_tag'], 10, 4);
         __one('init', ['__cf7_storage', 'init']);
         __one('shortcode_atts_wpcf7', ['__cf7_storage', 'shortcode_atts_wpcf7'], 10, 3);
+		__one('wpcf7_enqueue_scripts', ['__cf7_storage', 'wpcf7_enqueue_scripts']);
         __one('wpcf7_form_hidden_fields', ['__cf7_storage', 'wpcf7_form_hidden_fields']);
         __one('wpcf7_mail_sent', ['__cf7_storage', 'wpcf7_mail_sent']);
+		__one('wpcf7_verify_nonce', 'is_user_logged_in');
+    }
+}
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+if(!function_exists('__cf7_support_submit')){
+    function __cf7_support_submit(){
+        if(!class_exists('__cf7_submit')){
+            require_once(plugin_dir_path(__FILE__) . 'classes/submit.php');
+        }
+        __one('wpcf7_enqueue_scripts', ['__cf7_submit', 'wpcf7_enqueue_scripts']);
+        __one('wpcf7_enqueue_styles', ['__cf7_submit', 'wpcf7_enqueue_styles']);
     }
 }
 

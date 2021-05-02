@@ -22,27 +22,27 @@ if(!class_exists('__cf7_signup')){
             }
             $tags = wp_list_pluck($contact_form->scan_form_tags(), 'type', 'name');
             $missing = [];
-            if(!isset($tags['__user_email'])){
-                $missing[] = '__user_email';
+            if(!isset($tags['user_email'])){
+                $missing[] = 'user_email';
             }
-            if(!isset($tags['__user_password'])){
-                $missing[] = '__user_password';
+            if(!isset($tags['user_password'])){
+                $missing[] = 'user_password';
             }
             if($missing){
                 return current_user_can('manage_options') ? sprintf(__('Missing parameter(s): %s'), implode(', ', $missing)) . '.' : __('Something went wrong.');
             }
             $invalid = [];
-            if(isset($tags['__user_email']) and $tags['__user_email'] !== 'email*'){
-                $invalid[] = '__user_email';
+            if(isset($tags['user_email']) and $tags['user_email'] !== 'email*'){
+                $invalid[] = 'user_email';
             }
-            if(isset($tags['__user_login']) and $tags['__user_login'] !== 'text*'){
-                $invalid[] = '__user_login';
+            if(isset($tags['user_login']) and $tags['user_login'] !== 'text*'){
+                $invalid[] = 'user_login';
             }
-            if($tags['__user_password'] !== 'password*'){
-                $invalid[] = '__user_password';
+            if(isset($tags['user_password']) and $tags['user_password'] !== 'password*'){
+                $invalid[] = 'user_password';
             }
-            if($tags['__user_password_confirm'] !== 'password*'){
-                $invalid[] = '__user_password_confirm';
+            if(isset($tags['user_password_confirm']) and $tags['user_password_confirm'] !== 'password*'){
+                $invalid[] = 'user_password_confirm';
             }
             if($invalid){
                 return current_user_can('manage_options') ? sprintf(__('Invalid parameter(s): %s'), implode(', ', $invalid)) . '.' : __('Something went wrong.');
@@ -63,10 +63,10 @@ if(!class_exists('__cf7_signup')){
     			return;
     		}
             // Asumo que ya pasó por la validación de requeridos
-            $user_email = __get_posted_data('__user_email');
-            $user_login = __get_posted_data('__user_login');
-            $user_password = __get_posted_data('__user_password');
-            $user_password_confirm = __get_posted_data('__user_password_confirm');
+            $user_email = __get_posted_data('user_email');
+            $user_login = __get_posted_data('user_login');
+            $user_password = __get_posted_data('user_password');
+            $user_password_confirm = __get_posted_data('user_password_confirm');
             /*if($user_email === '' and $user_login === ''){
                 return;
             }
@@ -127,7 +127,7 @@ if(!class_exists('__cf7_signup')){
             if(!is_user_logged_in()){
                 if($contact_form->is_true('__login')){
                     wp_signon([
-                        'remember' => __get_posted_data('__remember'),
+                        'remember' => __get_posted_data('remember'),
                         'user_login' => $user_login,
                         'user_password' => $user_password,
                     ]);
@@ -138,7 +138,7 @@ if(!class_exists('__cf7_signup')){
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public static function wpcf7_validate_email($result, $tag){
-            if($tag->name !== '__user_email'){
+            if($tag->name !== 'user_email'){
                 return $result;
             }
             $contact_form = wpcf7_get_current_contact_form();
@@ -148,7 +148,7 @@ if(!class_exists('__cf7_signup')){
             if(!$contact_form->is_true('__signup')){
                 return $result;
             }
-            $user_email = __get_posted_data('__user_email');
+            $user_email = __get_posted_data('user_email');
             if($user_email === ''){
                 return $result; // required first
             }
@@ -162,7 +162,7 @@ if(!class_exists('__cf7_signup')){
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public static function wpcf7_validate_password($result, $tag){
-            if($tag->name !== '__user_password' and $tag->name !== '__user_password_confirm'){
+            if($tag->name !== 'user_password' and $tag->name !== 'user_password_confirm'){
                 return $result;
             }
             $contact_form = wpcf7_get_current_contact_form();
@@ -172,10 +172,10 @@ if(!class_exists('__cf7_signup')){
             if(!$contact_form->is_true('__signup')){
                 return $result;
             }
-            $user_password = __get_posted_data('__user_password');
-            $user_password_confirm = __get_posted_data('__user_password_confirm');
+            $user_password = __get_posted_data('user_password');
+            $user_password_confirm = __get_posted_data('user_password_confirm');
             switch($tag->name){
-                case '__user_password':
+                case 'user_password':
                     if($user_password === ''){
                         return $result; // required first
                     }
@@ -184,7 +184,7 @@ if(!class_exists('__cf7_signup')){
                         return $result;
                     }
                     break;
-                case '__user_password_confirm':
+                case 'user_password_confirm':
                     if($user_password_confirm === ''){
                         return $result; // required first
                     }
@@ -200,7 +200,7 @@ if(!class_exists('__cf7_signup')){
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         public static function wpcf7_validate_text($result, $tag){
-            if($tag->name !== '__user_login'){
+            if($tag->name !== 'user_login'){
                 return $result;
             }
             $contact_form = wpcf7_get_current_contact_form();
@@ -210,7 +210,7 @@ if(!class_exists('__cf7_signup')){
             if(!$contact_form->is_true('__signup')){
                 return $result;
             }
-            $user_login = __get_posted_data('__user_login');
+            $user_login = __get_posted_data('user_login');
             if($user_login === ''){
                 return $result; // required first
             }
